@@ -1,2 +1,10 @@
 require 'pry'
-require_relative '../lib/greenjaguar'
+require 'greenjaguar'
+require 'byebug'
+require 'webmock/rspec'
+
+require_relative '../lib/greenjaguar/strategies/default_wait_strategy'
+require_relative '../lib/greenjaguar/strategies/fibonacci_strategy'
+require_relative '../lib/greenjaguar/strategies/exponential_backoff_strategy'
+require_relative '../lib/greenjaguar/strategies/default_wait_strategy'
+require_relative '../lib/greenjaguar/retrier'
