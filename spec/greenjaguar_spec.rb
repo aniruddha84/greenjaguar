@@ -49,7 +49,7 @@ describe Greenjaguar do
 
   it '#run should call the passed code block 4 times according to fibonacci sequence' do
     policy = Greenjaguar::PolicyBuilder.new do
-      retry_times(3).with_strategy(:fibonacci)
+      retry_times(3).with_strategy(:fibonacci).measure_time_in(:ms)
     end
 
     expect do
@@ -58,5 +58,19 @@ describe Greenjaguar do
       end
     end.to raise_error
     assert_requested :get, "http://www.example.com", :times => 4
+  end
+
+  it '#run does not call the passed code block if exception is not part of allowed exception(s)' do
+    @stub = stub_request(:get, "www.example.com").to_raise(RegexpError)
+    policy = Greenjaguar::PolicyBuilder.new do
+      retry_times(5).with_strategy(:fibonacci).only_on_exceptions([ZeroDivisionError])
+    end
+
+    expect do
+      Greenjaguar::Retrier.run(policy) do
+        Net::HTTP.get_response(URI.parse("http://www.example.com"))
+      end
+    end.to raise_error
+    assert_requested :get, "http://www.example.com", :times => 1
   end
 end

@@ -7,13 +7,14 @@ Potential uses are for accessing cloud-based services that experience transient 
 with appropriate retry policies to make our applications more robust.
 
 Features:
-It currently supports following retry policies:
+* It currently supports following retry policies:
     * Default (no wait)
     * Fibonacci (wait times between retries increase in fibonacci sequence)
     * ExponentialBackOff (wait times increase using exponential backoff)
     * Random (wait times between retries vary between 0 - 5 secs)
 
-You can specify the time unit for retry (:sec or :ms). Default is seconds.
+* You can specify the time unit for retry (:sec or :ms). Default is seconds.
+* You can specify the Exception Types for which Retrier should execute. Default is all.
 
 If all retries fail, the last exception will be raised.
 

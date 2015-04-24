@@ -1,22 +1,22 @@
 module Greenjaguar
   class Retrier
-
-    def initialize(policy, &block)
-      @policy = policy
-      @retry_block = block
-    end
-
     class << self
       def run(policy, &block)
         self.new(policy, &block).exec
       end
     end
 
+    def initialize(policy, &block)
+      @policy = policy
+      @retry_block = block
+    end
+
     def exec
       @start_time = Time.new
       begin
         @retry_block.call
-      rescue
+      rescue => e
+        raise unless @policy.valid_exception? e
         if infinite_retry?
           @policy.wait
           retry

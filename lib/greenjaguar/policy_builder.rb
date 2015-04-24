@@ -1,10 +1,11 @@
 module Greenjaguar
   class PolicyBuilder
-    attr_accessor :count, :wait_strategy, :timeout, :logger, :strategy
+    attr_accessor :count, :wait_strategy, :timeout, :logger, :strategy, :exceptions
 
     def initialize(&block)
       @count = 1
       @timeout = 300
+      @exceptions = []
       instance_eval(&block)
     end
 
@@ -31,6 +32,19 @@ module Greenjaguar
     def with_strategy(wait_strategy)
       @strategy = init_wait_strategy(wait_strategy)
       self
+    end
+
+    def only_on_exceptions(exception_array)
+      @exceptions.concat exception_array
+    end
+
+    def valid_exception?(exception)
+      if @exceptions.empty?
+        return true
+      else
+        @exceptions.each {|ex| return true if exception < ex}
+      end
+      false
     end
 
     def wait
