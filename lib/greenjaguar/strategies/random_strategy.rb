@@ -1,13 +1,13 @@
 module Greenjaguar
   module Strategies
-    class DefaultWaitStrategy < WaitStrategy
+    class RandomStrategy < WaitStrategy
       def initialize
         super
-        @time_to_wait = 0
+        @time_to_wait = 5 * convert_to(time_unit)
       end
 
       def wait
-        sleep @time_to_wait
+        rand(@time_to_wait)
       end
     end
   end

@@ -1,6 +1,7 @@
 require 'pry'
 require 'greenjaguar'
 require 'byebug'
+require 'minitest'
 require 'webmock/rspec'
 
 require_relative '../lib/greenjaguar/strategies/default_wait_strategy'

@@ -1,10 +1,21 @@
 # Greenjaguar
 
-Ruby Library to apply retry behavior to arbitrary code blocks. This library is still in development and NOT ready for usage.
+Ruby Library to apply retry behavior to arbitrary code blocks with different policies like fibonacci,
+exponential backoff, etc. This basically the 'retry' construct on steroids.
+
+Potential uses are for accessing cloud-based services that experience transient faults. We should encapsulate our calls
+with appropriate retry policies to make our applications more robust.
 
 Features:
-- Will support wait strategies like Fibonacci, Exponential Backoff, etc.
+It currently supports following retry policies:
+    * Default (no wait)
+    * Fibonacci (wait times between retries increase in fibonacci sequence)
+    * ExponentialBackOff (wait times increase using exponential backoff)
+    * Random (wait times between retries vary between 0 - 5 secs)
 
+You can specify the time unit for retry (:sec or :ms). Default is seconds.
+
+If all retries fail, the last exception will be raised.
 
 ## Installation
 
@@ -24,7 +35,17 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+    Greenjaguar::Retrier.run(5, :fibonacci) do
+        Net::HTTP.get_response(URI.parse("http://www.example.com"))
+    end
+
+    Above code is passed to Greenjaguar which retries executes the block 6 times (first call + 5 retry attempts).
+    If all calls fail, the last exception is raised.
+
+## Issues
+
+1. Need more tests.
+2. Need implementation of more policies.
 
 ## Contributing
 

@@ -2,8 +2,9 @@ module Greenjaguar
   module Strategies
     class FibonacciStrategy < WaitStrategy
       def initialize
-        @prev_time_to_wait = 1
-        @time_to_wait = 1
+        super
+        @prev_time_to_wait = 1 * convert_to(time_unit)
+        @time_to_wait = @prev_time_to_wait
       end
 
       def wait
