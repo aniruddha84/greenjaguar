@@ -42,7 +42,7 @@ module Greenjaguar
       if @exceptions.empty?
         return true
       else
-        @exceptions.each {|ex| return true if exception < ex}
+        @exceptions.each {|ex| return true if exception.class <= ex}
       end
       false
     end

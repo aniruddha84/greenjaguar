@@ -3,6 +3,10 @@ module Greenjaguar
     class RandomStrategy < WaitStrategy
       def initialize
         super
+        @time_to_wait = 5
+      end
+
+      def reset_vars
         @time_to_wait = 5 * convert_to(time_unit)
       end
 

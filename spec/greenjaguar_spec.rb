@@ -23,7 +23,7 @@ describe Greenjaguar do
   end
 
   it '#run should call the passed code block only 1 time if successful response is received' do
-    @stub = stub_request(:get, "www.example.com")
+    @stub = stub_request(:get, "http://www.example.com")
 
     policy = Greenjaguar::PolicyBuilder.new do
       retry_times(3)
@@ -60,6 +60,19 @@ describe Greenjaguar do
     assert_requested :get, "http://www.example.com", :times => 4
   end
 
+  it '#run should call the passed code block 4 times according to exponential backoff sequence' do
+    policy = Greenjaguar::PolicyBuilder.new do
+      retry_times(10).with_strategy(:exponential_backoff).measure_time_in(:ms)
+    end
+
+    expect do
+      Greenjaguar::Retrier.run(policy) do
+        Net::HTTP.get_response(URI.parse("http://www.example.com"))
+      end
+    end.to raise_error
+    assert_requested :get, "http://www.example.com", :times => 11
+  end
+
   it '#run does not call the passed code block if exception is not part of allowed exception(s)' do
     @stub = stub_request(:get, "www.example.com").to_raise(RegexpError)
     policy = Greenjaguar::PolicyBuilder.new do
@@ -72,5 +85,19 @@ describe Greenjaguar do
       end
     end.to raise_error
     assert_requested :get, "http://www.example.com", :times => 1
+  end
+
+  it '#run should call the passed code block if exception is part of allowed exception(s)' do
+    @stub = stub_request(:get, "http://www.example.com").to_raise(ZeroDivisionError)
+    policy = Greenjaguar::PolicyBuilder.new do
+      retry_times(10).with_strategy(:fibonacci).measure_time_in(:ms).only_on_exceptions([ZeroDivisionError, IOError])
+    end
+
+    expect do
+      Greenjaguar::Retrier.run(policy) do
+        Net::HTTP.get_response(URI.parse("http://www.example.com"))
+      end
+    end.to raise_error
+    assert_requested :get, "http://www.example.com", :times => 11
   end
 end
