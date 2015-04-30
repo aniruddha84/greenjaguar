@@ -1,7 +1,7 @@
 # Greenjaguar
 
 Ruby Library to apply retry behavior to arbitrary code blocks with different policies like fibonacci,
-exponential backoff, etc. This basically is the 'retry' construct on steroids.
+exponential backoff, FixedInterval, etc. This basically is the 'retry' construct on steroids.
 
 Potential uses are for accessing cloud-based services that experience transient faults. We should encapsulate our calls
 with appropriate retry policies to make our applications more robust.
@@ -11,10 +11,12 @@ Features:
     * Default (no wait)
     * Fibonacci (wait times between retries increase in fibonacci sequence)
     * ExponentialBackOff (wait times increase using exponential backoff)
-    * Random (wait times between retries vary between 0 - 5 secs)
+    * Random (wait times between retries vary between 0 - 5 sec/ms)
+    * FixedInterval (wait every 'n' sec/ms)
 
 * You can specify the time unit for retry (:sec or :ms). Default is seconds.
 * You can specify the Exception Types for which Retrier should execute. Default is all.
+* You can specify that Retrier should fail silently (i.e. it wont raise any error if all retries fail)
 
 If all retries fail, the last exception will be raised.
 
@@ -36,17 +38,21 @@ Or install it yourself as:
 
 ## Usage
 
-    Greenjaguar::Retrier.run(5, :fibonacci) do
-        Net::HTTP.get_response(URI.parse("http://www.example.com"))
+    policy = Greenjaguar::PolicyBuilder.new do
+      retry_times(10).with_strategy(:exponential_backoff).measure_time_in(:ms).only_on_exceptions([Net::HTTPError])
     end
 
-    Above code is passed to Greenjaguar which retries executes the block 6 times (first call + 5 retry attempts).
-    If all calls fail, the last exception is raised.
+    Greenjaguar::Retrier.run(policy) do
+        # Your code goes here
+    end
+
+    Above code is passed to Greenjaguar which retries executes the block 11 times (first call + 10 retry attempts).
+    If all calls fail, the last exception is raised. Retry happens only if the error raised is of the
+    specified type.
 
 ## Issues
 
 1. Need more tests.
-2. Need implementation of more policies.
 
 ## Contributing
 
