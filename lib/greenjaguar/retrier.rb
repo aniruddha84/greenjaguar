@@ -17,12 +17,12 @@ module Greenjaguar
         @retry_block.call
       rescue => e
         raise unless @policy.valid_exception? e
-        if infinite_retry?
+        if @policy.never_give_up?
           @policy.wait
           retry
         else
           if time_out? || retry_count_reached?
-            raise
+            raise unless @policy.fail_silently?
           else
             decrement_retry_count
             @policy.wait
@@ -33,10 +33,6 @@ module Greenjaguar
     end
 
     private
-
-    def infinite_retry?
-      @policy.count == -1
-    end
 
     def time_out?
       Time.now - @start_time > @policy.timeout

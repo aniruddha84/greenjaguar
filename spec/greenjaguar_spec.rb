@@ -60,9 +60,9 @@ describe Greenjaguar do
     assert_requested :get, "http://www.example.com", :times => 4
   end
 
-  it '#run should call the passed code block 4 times according to exponential backoff sequence' do
+  it '#run should call the passed code block 4 times according to fixed interval strategy' do
     policy = Greenjaguar::PolicyBuilder.new do
-      retry_times(10).with_strategy(:exponential_backoff).measure_time_in(:ms)
+      retry_times(3).with_strategy(:fixed_interval, 2).measure_time_in(:ms)
     end
 
     expect do
@@ -70,7 +70,20 @@ describe Greenjaguar do
         Net::HTTP.get_response(URI.parse("http://www.example.com"))
       end
     end.to raise_error
-    assert_requested :get, "http://www.example.com", :times => 11
+    assert_requested :get, "http://www.example.com", :times => 4
+  end
+
+  it '#run should call the passed code block 4 times according to exponential backoff sequence' do
+    policy = Greenjaguar::PolicyBuilder.new do
+      retry_times(5).with_strategy(:exponential_backoff).measure_time_in(:ms)
+    end
+
+    expect do
+      Greenjaguar::Retrier.run(policy) do
+        Net::HTTP.get_response(URI.parse("http://www.example.com"))
+      end
+    end.to raise_error
+    assert_requested :get, "http://www.example.com", :times => 6
   end
 
   it '#run does not call the passed code block if exception is not part of allowed exception(s)' do
@@ -89,6 +102,7 @@ describe Greenjaguar do
 
   it '#run should call the passed code block if exception is part of allowed exception(s)' do
     @stub = stub_request(:get, "http://www.example.com").to_raise(ZeroDivisionError)
+
     policy = Greenjaguar::PolicyBuilder.new do
       retry_times(10).with_strategy(:fibonacci).measure_time_in(:ms).only_on_exceptions([ZeroDivisionError, IOError])
     end
@@ -100,4 +114,15 @@ describe Greenjaguar do
     end.to raise_error
     assert_requested :get, "http://www.example.com", :times => 11
   end
+
+  it '#run should not raise the error if set to fail silently' do
+    policy = Greenjaguar::PolicyBuilder.new do
+      retry_times(3).fail_silently
+    end
+
+    Greenjaguar::Retrier.run(policy) do
+      Net::HTTP.get_response(URI.parse("http://www.example.com"))
+    end
+  end
+
 end

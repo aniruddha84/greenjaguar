@@ -5,6 +5,7 @@ module Greenjaguar
         super
         @retry_interval = 0.5
         @randomization_factor = 0.5
+        @retry_count = 0
       end
 
       def reset_vars
@@ -14,8 +15,10 @@ module Greenjaguar
 
       def wait
         sleep @retry_interval
-        @retry_interval += @retry_interval * ([1 - @randomization_factor,
+        @retry_count += 1
+        increment = (2 ** @retry_count - 1) * ([1 - @randomization_factor,
                                             1 + @randomization_factor][random_index])
+        @retry_interval += increment * convert_to(time_unit)
       end
 
       private

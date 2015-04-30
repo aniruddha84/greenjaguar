@@ -24,13 +24,29 @@ module Greenjaguar
       self
     end
 
+    def fail_silently
+      @fail_silently = true
+    end
+
+    def fail_silently?
+      @fail_silently
+    end
+
+    def never_give_up
+      @count = -1
+    end
+
+    def never_give_up?
+      @count == -1
+    end
+
     def measure_time_in(time_unit)
       @strategy.time_unit = time_unit
       self
     end
 
-    def with_strategy(wait_strategy)
-      @strategy = init_wait_strategy(wait_strategy)
+    def with_strategy(wait_strategy, *args)
+      @strategy = init_wait_strategy(wait_strategy, *args)
       self
     end
 
@@ -57,7 +73,7 @@ module Greenjaguar
       @strategy ||= init_wait_strategy(:default)
     end
 
-    def init_wait_strategy(wait_strategy)
+    def init_wait_strategy(wait_strategy, *args)
       case wait_strategy
         when :fibonacci
           return Greenjaguar::Strategies::FibonacciStrategy.new
@@ -65,6 +81,8 @@ module Greenjaguar
           return Greenjaguar::Strategies::ExponentialBackoffStrategy.new
         when :random
           return Greenjaguar::Strategies::RandomStrategy.new
+        when :fixed_interval
+          return Greenjaguar::Strategies::FixedIntervalStrategy.new(*args)
         else
           return Greenjaguar::Strategies::DefaultWaitStrategy.new
       end

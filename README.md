@@ -1,7 +1,7 @@
 # Greenjaguar
 
 Ruby Library to apply retry behavior to arbitrary code blocks with different policies like fibonacci,
-exponential backoff, etc. This basically the 'retry' construct on steroids.
+exponential backoff, etc. This basically is the 'retry' construct on steroids.
 
 Potential uses are for accessing cloud-based services that experience transient faults. We should encapsulate our calls
 with appropriate retry policies to make our applications more robust.

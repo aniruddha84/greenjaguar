@@ -3,7 +3,7 @@ module Greenjaguar
     class WaitStrategy
       attr_accessor :time_unit
 
-      def initialize
+      def initialize(*args)
         @time_unit = :sec # default value is seconds
       end
 
