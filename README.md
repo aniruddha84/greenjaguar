@@ -1,6 +1,9 @@
 # Greenjaguar
 
-Ruby Library to apply retry behavior to arbitrary code blocks with different policies like fibonacci,
+This Ruby Library intends to offer collection of re-usable components that are often needed in enterprise application development.
+
+Components:
+Retrier: Ruby Library to apply retry behavior to arbitrary code blocks with different policies like fibonacci,
 exponential backoff, FixedInterval, etc. This basically is the 'retry' construct on steroids.
 
 Potential uses are for accessing cloud-based services that experience transient faults. We should encapsulate our calls
@@ -38,11 +41,14 @@ Or install it yourself as:
 
 ## Usage
 
-    policy = Greenjaguar::PolicyBuilder.new do
-      retry_times(10).with_strategy(:exponential_backoff).measure_time_in(:ms).only_on_exceptions([Net::HTTPError])
+    policy = PolicyBuilder.new do
+      retry_times 10
+      with_strategy :exponential_backoff
+      measure_time_in :ms
+      only_on_exceptions [Net::HTTPError]
     end
 
-    Greenjaguar::Retrier.run(policy) do
+    Retrier.run(policy) do
         # Your code goes here
     end
 
