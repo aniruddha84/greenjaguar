@@ -2,13 +2,16 @@ module Greenjaguar
   class Retrier
     class << self
       def run(policy, &block)
-        self.new(policy, &block).exec
+        self.new(policy, &block)
       end
     end
+
+    private
 
     def initialize(policy, &block)
       @policy = policy
       @retry_block = block
+      exec
     end
 
     def exec
@@ -31,8 +34,6 @@ module Greenjaguar
         end
       end
     end
-
-    private
 
     def time_out?
       Time.now - @start_time > @policy.timeout
