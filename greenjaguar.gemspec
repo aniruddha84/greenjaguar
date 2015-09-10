@@ -8,8 +8,8 @@ Gem::Specification.new do |spec|
   spec.version       = Greenjaguar::VERSION
   spec.authors       = ["Aniruddha Deshpande"]
   spec.email         = ["anides84 AT hotmail DOT com"]
-  spec.summary       = %q{TODO: Write a short summary. Required.}
-  spec.description   = %q{TODO: Write a longer description. Optional.}
+  spec.summary       = %q{Applies retry behavior to arbitrary code blocks with different policies like fibonacci,
+exponential backoff, FixedInterval, etc. This basically is the 'retry' construct on steroids.}
   spec.homepage      = ""
   spec.license       = "MIT"
 
