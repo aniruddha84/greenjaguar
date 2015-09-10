@@ -2,10 +2,12 @@
 
 # Greenjaguar
 
-This Ruby Library intends to offer collection of re-usable components that are often needed in enterprise application development.
+This Ruby Library intends to offer collection of re-usable components that are often needed in
+enterprise application development.
 
 Components:
-Retrier: Ruby Library to apply retry behavior to arbitrary code blocks with different policies like fibonacci,
+
+Retrier: Apply retry behavior to arbitrary code blocks with different policies like fibonacci,
 exponential backoff, FixedInterval, etc. This basically is the 'retry' construct on steroids.
 
 Potential uses are for accessing cloud-based services that experience transient faults. We should encapsulate our calls
@@ -18,7 +20,6 @@ Features:
     * ExponentialBackOff (wait times increase using exponential backoff)
     * Random (wait times between retries vary between 0 - 5 sec/ms)
     * FixedInterval (wait every 'n' sec/ms)
-
 * You can specify the time unit for retry (:sec or :ms). Default is seconds.
 * You can specify the Exception Types for which Retrier should execute. Default is all.
 * You can specify that Retrier should fail silently (i.e. it wont raise any error if all retries fail)
@@ -42,21 +43,30 @@ Or install it yourself as:
     $ gem install greenjaguar
 
 ## Usage
+```ruby
+class Example
+  include Greenjaguar
 
-    policy = PolicyBuilder.new do
+  def initialize
+    @policy = PolicyBuilder.new do
       retry_times 10
       with_strategy :exponential_backoff
       measure_time_in :ms
       only_on_exceptions [Net::HTTPError]
     end
+  end
 
-    Retrier.run(policy) do
-        # Your code goes here
+  def some_method
+    Retrier.run(@policy) do
+      # Your code goes here
     end
-
-    Above code is passed to Greenjaguar which retries executes the block 11 times (first call + 10 retry attempts).
-    If all calls fail, the last exception is raised. Retry happens only if the error raised is of the
-    specified type.
+  end
+end
+```
+In the above example your code block is passed to Greenjaguar which executes it 11 times
+(first call + 10 retry attempts, in case of failures).
+If all calls fail, the last exception is raised. Retry happens only if the error raised is of the
+specified type.
 
 ## Issues
 
