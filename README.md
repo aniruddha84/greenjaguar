@@ -66,6 +66,7 @@ specified type.
 ## Issues
 
 1. Need more tests.
+2. Need logo.
 
 ## Contributing
 
