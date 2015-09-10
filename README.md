@@ -1,6 +1,6 @@
 Note: **Not Production ready yet**
 
-# Greenjaguar
+# Greenjaguar [![Build Status](https://travis-ci.org/aniruddha84/greenjaguar.svg?branch=master)](https://travis-ci.org/aniruddha84/greenjaguar)
 
  Applies retry behavior to arbitrary code blocks with different policies like fibonacci,
 exponential backoff, FixedInterval, etc. This basically is the 'retry' construct on steroids.
