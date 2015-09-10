@@ -1,13 +1,8 @@
-!!! In Alpha stage right now !!!
+Note: *Not Production ready yet*
 
 # Greenjaguar
 
-This Ruby Library intends to offer collection of re-usable components that are often needed in
-enterprise application development.
-
-Components:
-
-Retrier: Apply retry behavior to arbitrary code blocks with different policies like fibonacci,
+ Applies retry behavior to arbitrary code blocks with different policies like fibonacci,
 exponential backoff, FixedInterval, etc. This basically is the 'retry' construct on steroids.
 
 Potential uses are for accessing cloud-based services that experience transient faults. We should encapsulate our calls
