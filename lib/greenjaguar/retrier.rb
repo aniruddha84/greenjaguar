@@ -1,12 +1,5 @@
 module Greenjaguar
   class Retrier
-    class << self
-      def run(policy, &block)
-        self.new(policy, &block)
-      end
-    end
-
-    private
 
     def initialize(policy, &block)
       @policy = policy
@@ -14,6 +7,7 @@ module Greenjaguar
       exec
     end
 
+    private
     def exec
       @start_time = Time.new
       begin
