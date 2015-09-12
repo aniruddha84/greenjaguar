@@ -43,7 +43,7 @@ class YourClass
   include Greenjaguar
 
   def your_method
-    # Build retrying policies
+    # Build retry policy
     @policy = build_policy do
         retry_times 10
         with_strategy :exponential_backoff
