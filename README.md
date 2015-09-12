@@ -39,20 +39,20 @@ Or install it yourself as:
 
 ## Usage
 ```ruby
-class Example
+class YourClass
   include Greenjaguar
 
-  def initialize
-    @policy = PolicyBuilder.new do
-      retry_times 10
-      with_strategy :exponential_backoff
-      measure_time_in :ms
-      only_on_exceptions [Net::HTTPError]
+  def your_method
+    # Build retry policy
+    @policy = build_policy do
+        retry_times 10
+        with_strategy :exponential_backoff
+        measure_time_in :ms
+        only_on_exceptions [Net::HTTPError]
     end
-  end
 
-  def some_method
-    Retrier.run(@policy) do
+    # Executes your code using the policy
+    robust_retry(@policy) do
       # Your code goes here
     end
   end

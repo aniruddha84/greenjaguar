@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.email         = ["anides84 AT hotmail DOT com"]
   spec.summary       = %q{Applies retry behavior to arbitrary code blocks with different policies like fibonacci,
 exponential backoff, FixedInterval, etc. This basically is the 'retry' construct on steroids.}
-  spec.homepage      = ""
+  spec.homepage      = "https://github.com/aniruddha84/greenjaguar"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files -z`.split("\x0")
@@ -20,14 +20,10 @@ exponential backoff, FixedInterval, etc. This basically is the 'retry' construct
 
   spec.add_development_dependency "bundler", "~> 1.7"
   spec.add_development_dependency "rake", "~> 10.0"
-  spec.add_development_dependency "rspec"
-  spec.add_development_dependency "rspec-nc"
-  spec.add_development_dependency "guard"
-  spec.add_development_dependency "guard-rspec"
-  spec.add_development_dependency "pry"
-  spec.add_development_dependency "pry-remote"
-  spec.add_development_dependency "pry-nav"
-  spec.add_development_dependency "byebug"
-  spec.add_development_dependency "webmock"
+  spec.add_development_dependency "rspec", "~> 3.2"
+  spec.add_development_dependency "guard", "~> 2.12"
+  spec.add_development_dependency "guard-rspec", "~> 4.6"
+  spec.add_development_dependency "byebug", "~> 6.0"
+  spec.add_development_dependency "webmock", "~> 1.21"
   spec.add_development_dependency "minitest"
 end
