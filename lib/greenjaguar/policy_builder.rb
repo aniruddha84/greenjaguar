@@ -1,6 +1,6 @@
 module Greenjaguar
   class PolicyBuilder
-    attr_accessor :count, :wait_strategy, :timeout, :logger, :strategy, :exceptions
+    attr_accessor :count, :wait_strategy, :timeout, :logger, :exceptions
 
     def initialize(&block)
       @count = 1
@@ -41,7 +41,7 @@ module Greenjaguar
     end
 
     def measure_time_in(time_unit)
-      @strategy.time_unit = time_unit
+      strategy.time_unit = time_unit
       self
     end
 
@@ -67,11 +67,11 @@ module Greenjaguar
       strategy.wait
     end
 
-    private
-
     def strategy
       @strategy ||= init_wait_strategy(:default)
     end
+
+    private
 
     def init_wait_strategy(wait_strategy, *args)
       case wait_strategy

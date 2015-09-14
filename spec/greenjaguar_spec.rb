@@ -15,7 +15,7 @@ module Specs
       WebMock.reset!
     end
 
-    it '#run should call the passed code block 4 times' do
+    it 'should call the passed code block 4 times' do
       policy = @object_under_test.build_policy do
         times 3
       end
@@ -28,7 +28,7 @@ module Specs
       assert_requested :get, "http://www.example.com", :times => 4
     end
 
-    it '#run should call the passed code block only 1 time if successful response is received' do
+    it 'should call the passed code block only 1 time if successful response is received' do
       @stub = stub_request(:get, "http://www.example.com")
 
       policy = @object_under_test.build_policy do
@@ -41,7 +41,7 @@ module Specs
       assert_requested :get, "http://www.example.com", :times => 1
     end
 
-    it '#run should raise the error once retrying is completed' do
+    it 'should raise the error once retrying is completed' do
       policy = @object_under_test.build_policy do
         times 3
       end
@@ -53,7 +53,7 @@ module Specs
       end.to raise_error
     end
 
-    it '#run should call the passed code block 4 times according to fibonacci sequence' do
+    it 'should call the passed code block 4 times according to fibonacci sequence' do
       policy = @object_under_test.build_policy do
         times 3
         with_strategy :fibonacci
@@ -68,7 +68,7 @@ module Specs
       assert_requested :get, "http://www.example.com", :times => 4
     end
 
-    it '#run should call the passed code block 4 times according to fixed interval strategy' do
+    it 'should call the passed code block 4 times according to fixed interval strategy' do
       policy = @object_under_test.build_policy do
         times 3
         with_strategy :fixed_interval, 2
@@ -83,7 +83,7 @@ module Specs
       assert_requested :get, "http://www.example.com", :times => 4
     end
 
-    it '#run should call the passed code block 4 times according to exponential backoff sequence' do
+    it 'should call the passed code block 4 times according to exponential backoff sequence' do
       policy = @object_under_test.build_policy do
         times 5
         with_strategy :exponential_backoff
@@ -98,7 +98,7 @@ module Specs
       assert_requested :get, "http://www.example.com", :times => 6
     end
 
-    it '#run does not call the passed code block if exception is not part of allowed exception(s)' do
+    it 'does not call the passed code block if exception is not part of allowed exception(s)' do
       @stub = stub_request(:get, "www.example.com").to_raise(RegexpError)
       policy = @object_under_test.build_policy do
         times 5
@@ -114,7 +114,7 @@ module Specs
       assert_requested :get, "http://www.example.com", :times => 1
     end
 
-    it '#run should call the passed code block if exception is part of allowed exception(s)' do
+    it 'should call the passed code block if exception is part of allowed exception(s)' do
       @stub = stub_request(:get, "http://www.example.com").to_raise(ZeroDivisionError)
 
       policy = @object_under_test.build_policy do
@@ -132,7 +132,7 @@ module Specs
       assert_requested :get, "http://www.example.com", :times => 11
     end
 
-    it '#run should not raise the error if set to fail silently' do
+    it 'should not raise the error if set to fail silently' do
       policy = @object_under_test.build_policy do
         times 3
         fail_silently
@@ -141,6 +141,16 @@ module Specs
       @object_under_test.robust_retry(policy) do
         Net::HTTP.get_response(URI.parse("http://www.example.com"))
       end
+    end
+
+    it 'should use default strategy when none is specified' do
+      policy = @object_under_test.build_policy do
+        times 3
+        measure_time_in :ms
+        fail_silently
+      end
+
+      expect(policy.strategy.class).to eql(Greenjaguar::Strategies::DefaultWaitStrategy)
     end
 
   end
