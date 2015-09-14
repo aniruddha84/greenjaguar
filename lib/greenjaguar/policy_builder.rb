@@ -19,7 +19,7 @@ module Greenjaguar
       self
     end
 
-    def use_logger(logger)
+    def logger(logger)
       @logger = logger
       self
     end
