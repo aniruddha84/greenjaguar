@@ -16,7 +16,7 @@ module Specs
 
     it '#run should call the passed code block 4 times' do
       policy = class_under_test.build_policy do
-        retry_times 3
+        times 3
       end
 
       expect do
@@ -31,7 +31,7 @@ module Specs
       @stub = stub_request(:get, "http://www.example.com")
 
       policy = class_under_test.build_policy do
-        retry_times 3
+        times 3
       end
 
       class_under_test.robust_retry(policy) do
@@ -42,7 +42,7 @@ module Specs
 
     it '#run should raise the error once retrying is completed' do
       policy = class_under_test.build_policy do
-        retry_times 3
+        times 3
       end
 
       expect do
@@ -54,7 +54,7 @@ module Specs
 
     it '#run should call the passed code block 4 times according to fibonacci sequence' do
       policy = class_under_test.build_policy do
-        retry_times 3
+        times 3
         with_strategy :fibonacci
         measure_time_in :ms
       end
@@ -69,7 +69,7 @@ module Specs
 
     it '#run should call the passed code block 4 times according to fixed interval strategy' do
       policy = class_under_test.build_policy do
-        retry_times 3
+        times 3
         with_strategy :fixed_interval, 2
         measure_time_in :ms
       end
@@ -84,7 +84,7 @@ module Specs
 
     it '#run should call the passed code block 4 times according to exponential backoff sequence' do
       policy = class_under_test.build_policy do
-        retry_times 5
+        times 5
         with_strategy :exponential_backoff
         measure_time_in :ms
       end
@@ -100,7 +100,7 @@ module Specs
     it '#run does not call the passed code block if exception is not part of allowed exception(s)' do
       @stub = stub_request(:get, "www.example.com").to_raise(RegexpError)
       policy = class_under_test.build_policy do
-        retry_times 5
+        times 5
         with_strategy :fibonacci
         only_on_exceptions [ZeroDivisionError]
       end
@@ -117,7 +117,7 @@ module Specs
       @stub = stub_request(:get, "http://www.example.com").to_raise(ZeroDivisionError)
 
       policy = class_under_test.build_policy do
-        retry_times 10
+        times 10
         with_strategy :fibonacci
         measure_time_in :ms
         only_on_exceptions [ZeroDivisionError, IOError]
@@ -133,7 +133,7 @@ module Specs
 
     it '#run should not raise the error if set to fail silently' do
       policy = class_under_test.build_policy do
-        retry_times 3
+        times 3
         fail_silently
       end
 

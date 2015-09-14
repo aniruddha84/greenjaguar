@@ -9,7 +9,7 @@ module Greenjaguar
       instance_eval(&block)
     end
 
-    def retry_times(retry_count)
+    def times(retry_count)
       @count = retry_count
       self
     end
