@@ -14,7 +14,7 @@ module Greenjaguar
       self
     end
 
-    def should_timeout_after(retry_timeout)
+    def timeout_after(retry_timeout)
       @timeout = retry_timeout
       self
     end
