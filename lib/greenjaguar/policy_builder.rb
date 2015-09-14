@@ -9,17 +9,17 @@ module Greenjaguar
       instance_eval(&block)
     end
 
-    def retry_times(retry_count)
+    def times(retry_count)
       @count = retry_count
       self
     end
 
-    def should_timeout_after(retry_timeout)
+    def timeout_after(retry_timeout)
       @timeout = retry_timeout
       self
     end
 
-    def use_logger(logger)
+    def logger(logger)
       @logger = logger
       self
     end
