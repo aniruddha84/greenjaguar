@@ -1,5 +1,4 @@
 require 'pry'
 require 'greenjaguar'
 require 'byebug'
-require 'minitest'
 require 'webmock/rspec'

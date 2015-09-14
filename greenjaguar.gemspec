@@ -25,5 +25,4 @@ exponential backoff, FixedInterval, etc. This basically is the 'retry' construct
   spec.add_development_dependency "guard-rspec", "~> 4.6"
   spec.add_development_dependency "byebug", "~> 6.0"
   spec.add_development_dependency "webmock", "~> 1.21"
-  spec.add_development_dependency "minitest"
 end
