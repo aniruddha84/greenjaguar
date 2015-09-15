@@ -1,4 +1,3 @@
-Note: **Not Production ready yet**
 
 # Greenjaguar [![Build Status](https://travis-ci.org/aniruddha84/greenjaguar.svg?branch=master)](https://travis-ci.org/aniruddha84/greenjaguar)
 
