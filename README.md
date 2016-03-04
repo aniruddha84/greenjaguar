@@ -42,17 +42,19 @@ class YourClass
   include Greenjaguar
 
   def your_method
-    # Build retry policy
-    @policy = build_policy do
-        times 10
-        with_strategy :exponential_backoff
-        measure_time_in :ms
-        only_on_exceptions [Net::HTTPError]
-    end
-
     # Executes your code using the policy
-    robust_retry(@policy) do
+    robust_retry(policy) do
       # Your code goes here
+    end
+  end
+
+  def policy
+    # Build retry policy
+    @policy ||= build_policy do
+      times 10
+      with_strategy :exponential_backoff
+      measure_time_in :ms
+      only_on_exceptions [Net::HTTPError]
     end
   end
 end
